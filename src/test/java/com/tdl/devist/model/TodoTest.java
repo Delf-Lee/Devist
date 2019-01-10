@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.context.annotation.Profile;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 
 

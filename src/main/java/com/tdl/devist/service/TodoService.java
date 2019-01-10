@@ -20,6 +20,10 @@ public class TodoService {
         this.dailyCheckService = dailyCheckService;
     }
 
+    public Todo findTodoById(int id) {
+        return todoRepository.getOne(id);
+    }
+
     public void addTodo(User user, Todo todo) {
         todo.setUser(user);
         todo.setCreatedTime(LocalDateTime.now());
@@ -27,18 +31,10 @@ public class TodoService {
         todoRepository.save(todo);
     }
 
-    public Todo findTodoById(int id) {
-        return todoRepository.getOne(id);
-    }
-
-    public void deleteTodo(Todo todo) {
-        todoRepository.delete(todo);
-    }
-
     public void deleteTodo(User user, int todoId) {
         Todo todo = todoRepository.getOne(todoId);
         user.getTodoList().remove(todo);
-        deleteTodo(todo);
+        todoRepository.deleteById(todoId);
     }
 
     public void updateTodo(int id, Todo editedTodo) {
@@ -47,7 +43,6 @@ public class TodoService {
         originTodo.setTitle(editedTodo.getTitle());
         originTodo.setDescription(editedTodo.getDescription());
         originTodo.setRepeatDay(editedTodo.getRepeatDay());
-        todoRepository.save(originTodo);
     }
 
     public long count() {

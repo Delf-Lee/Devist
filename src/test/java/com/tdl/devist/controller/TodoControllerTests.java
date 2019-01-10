@@ -87,7 +87,7 @@ public class TodoControllerTests {
                 .andExpect(status().is3xxRedirection());
 
         User afterUser = userRepository.getOne("admin");
-        Assert.assertEquals(size + 1, afterUser.getTodoList().size());
+        Assert.assertEquals("사용자가 추가되지 않음",size + 1, afterUser.getTodoList().size());
         Assert.assertEquals("test title", afterUser.getTodoList().get(0).getTitle());
     }
 
@@ -106,7 +106,7 @@ public class TodoControllerTests {
                 .andExpect(status().is3xxRedirection());
 
         User afterUSer = userRepository.getOne("cjh5414");
-        Assert.assertEquals(size - 1, afterUSer.getTodoList().size());
+        Assert.assertEquals("사용자가 삭제되지 않음", size - 1, afterUSer.getTodoList().size());
     }
 
     @Test
