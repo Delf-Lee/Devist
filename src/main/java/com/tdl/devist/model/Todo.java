@@ -71,4 +71,10 @@ public class Todo {
         int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
         return (repeatDay & (1 << (dayOfWeek - 1))) > 0;
     }
+
+    public void updateTodo(Todo editedTodo) {
+        title = editedTodo.getTitle();
+        description = editedTodo.getDescription();
+        repeatDay = editedTodo.getRepeatDay();
+    }
 }

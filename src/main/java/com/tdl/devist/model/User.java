@@ -42,6 +42,10 @@ public class User {
         return todoList.add(todo);
     }
 
+    public boolean deleteTodo(Todo todo) {
+        return todoList.remove(todo);
+    }
+
     public List<Todo> getTodayTodoList() {
         List<Todo> todayTodoList = new ArrayList<>();
 
@@ -60,18 +64,5 @@ public class User {
                 completedTodayTodoList.add(todo);
 
         return completedTodayTodoList;
-    }
-
-    public Todo editTodo(Todo originTodo, Todo editedTodo) {
-        int index = indexOf(originTodo);
-        originTodo.setTitle(editedTodo.getTitle());
-        originTodo.setDescription(editedTodo.getDescription());
-        originTodo.setRepeatDay(editedTodo.getRepeatDay());
-        return todoList.set(index, originTodo);
-    }
-
-
-    private int indexOf(Todo todo) {
-        return todoList.indexOf(todo);
     }
 }

@@ -33,16 +33,13 @@ public class TodoService {
 
     public void deleteTodo(User user, int todoId) {
         Todo todo = todoRepository.getOne(todoId);
-        user.getTodoList().remove(todo);
+        user.deleteTodo(todo);
         todoRepository.deleteById(todoId);
     }
 
     public void updateTodo(int id, Todo editedTodo) {
         Todo originTodo = todoRepository.getOne(id);
-
-        originTodo.setTitle(editedTodo.getTitle());
-        originTodo.setDescription(editedTodo.getDescription());
-        originTodo.setRepeatDay(editedTodo.getRepeatDay());
+        originTodo.updateTodo(editedTodo);
     }
 
     public long count() {
