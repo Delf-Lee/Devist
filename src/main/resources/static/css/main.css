@@ -6,3 +6,7 @@
     opacity: 0.5;
     text-decoration:line-through;
 }
+
+tr:hover {
+    background-color: #f5f5f5;
+}
