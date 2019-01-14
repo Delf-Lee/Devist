@@ -18,8 +18,9 @@
         </tr>
         </thead>
 
-        <tbody>
-        <tr th:each="todo: ${todo_list}">
+        <tbody id="grid-view">
+
+        <tr th:each="todo: ${todo_list}" th:value="${todo.id}">
             <td><span th:text="${todo.title}"></span></td>
             <td><span th:text="${todo.description}"></span></td>
             <td><span th:each="dw, index : ${todo.repeatCheckbox}">
