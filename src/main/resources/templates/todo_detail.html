@@ -1,0 +1,18 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="common_layout">
+
+<head>
+    <title th:text="${todo.title}"></title>
+</head>
+
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <h2 th:text="${todo.title}"></h2>
+
+    </div>
+
+</section>
+</body>
+</html>
+

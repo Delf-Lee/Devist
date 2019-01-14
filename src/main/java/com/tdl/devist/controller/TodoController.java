@@ -1,10 +1,12 @@
 package com.tdl.devist.controller;
 
+import com.sun.tracing.dtrace.ProviderAttributes;
 import com.tdl.devist.model.Todo;
 import com.tdl.devist.model.User;
 import com.tdl.devist.service.TodoService;
 import com.tdl.devist.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -85,5 +87,13 @@ public class TodoController {
         todoService.updateDoneRate(id);
         userService.updateDoneRate(principal.getName());
         return "ok";
+    }
+
+    @GetMapping("/{id}")
+    public String detail(@PathVariable int id, Model model) {
+        Todo todo = todoService.findTodoById(id);
+        model.addAttribute("todo", todo);
+        return "todo_detail";
+
     }
 }
