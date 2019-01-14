@@ -7,10 +7,39 @@
 
 <body>
 <section layout:fragment="content">
+
     <div class="container">
-        <h2 th:text="${todo.title}"></h2>
+        <h2 class="display-4" th:text="${todo.title}"></h2>
+    </div>
+
+    <div class="progress container" style="height: 40px" id="todo-detail-page-progress-bar">
+        <div class="progress-bar" role="progressbar" th:style="'width: '+(${todo.doneRate})+'%'"
+             th:aria-valuenow="${todo.doneRate}" th:text="${todo.doneRate}+'%'"
+             aria-valuemin="0" aria-valuemax="100">
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h4>Description</h4>
+        <a th:text="${todo.description}"></a>
+
+        <h4>Repeat days</h4>
+        <span th:each="dw, index : ${todo.repeatCheckbox}">
+            <span th:if="${dw}" th:with="wstr=${todo.WEEK_DAY[index.index]}" th:switch="${wstr}">
+                <a th:case="'토'" style="color: blue" th:text="${wstr}"></a>
+                <a th:case="'일'" style="color: red;" th:text="${wstr}"></a>
+                <a th:case="*" th:text="${wstr}"></a>
+            </span>
+        </span>
+        <br>
+        <h4>Created date</h4>
+        <span th:text="${todo.createdTime}"></span>
 
     </div>
+
+
+    <a class="btn btn-dark btn-sm active" th:href="@{/todo/{id}/edit(id=${todo.id})}">수정</a>
 
 </section>
 </body>

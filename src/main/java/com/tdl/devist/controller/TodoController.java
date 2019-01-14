@@ -31,6 +31,7 @@ public class TodoController {
     public String getTodoList(Principal principal, Model model) {
         User user = userService.getUserByUserName(principal.getName());
         List<Todo> todoList = user.getTodoList();
+        // TODO: 각 todo에 repeatCheckbox 적용하기
 
         model.addAttribute("todo_list", todoList);
 
@@ -92,6 +93,7 @@ public class TodoController {
     @GetMapping("/{id}")
     public String detail(@PathVariable int id, Model model) {
         Todo todo = todoService.findTodoById(id);
+        todo.convertRepeatDayByteToBooleanArr();
         model.addAttribute("todo", todo);
         return "todo_detail";
 
