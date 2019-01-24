@@ -1,6 +1,6 @@
 package com.tdl.devist.model;
 
-public abstract class RepeatDay implements Repeatable {
+public abstract class RepeatDay implements Repeatable, Presentable {
     private Todo todo;
     /**
      * 시작 기준 날(요일). 기본 값은 월요일이다.

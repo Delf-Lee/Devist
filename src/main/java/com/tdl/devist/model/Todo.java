@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -22,8 +21,9 @@ public class Todo {
     private int id;
     private String title;
     private String description;
-    @Column(length = 1)
-    private byte repeatDay = 127;
+    /*@Column(length = 1)
+    private byte repeatDay = 127;*/
+    private RepeatDay repeatDay;
     private LocalDateTime createdTime;
     private double doneRate = 0.0;
     @OneToOne
@@ -54,27 +54,20 @@ public class Todo {
         return latestDailyCheck.isDone();
     }
 
-    /**
-     * @author delf
-     * <p>
-     * view에서 받아 저장된 {@link #repeatCheckbox}을 byte로 변환하여 {@link #repeatDay}에 저장합니다.
-     * 이슈 #17을 참고할 것.
-     */
-    public void convertRepeatDayBooleanArrToByte() {
-        repeatDay = 0;
-        for (int i = repeatCheckbox.length - 1; i >= 0; i--) {
-            repeatDay |= repeatCheckbox[i] ? (byte) (1 << (repeatCheckbox.length - 1) - i) : 0;
-        }
-    }
-
-    public void convertRepeatDayByteToBooleanArr() {
-        for (int i = 0; i < repeatCheckbox.length; i++) {
-            repeatCheckbox[repeatCheckbox.length - 1 - i] = ((repeatDay >> i) & 1) == 1;
-        }
-    }
-
     public boolean isTodaysTodo() {
-        int dayOfWeek = LocalDate.now().getDayOfWeek().getValue();
-        return (repeatDay & (1 << (dayOfWeek - 1))) > 0;
+        return repeatDay.isTodaysTodo();
+    }
+
+    // NOTE:
+    public void setRepeayDay(boolean[] checkbox) {
+        ((FixedRepeatDay) repeatDay).setFixedDays(checkbox);
+    }
+
+    public void convertRepeatDayByteToBooleanArr(){
+
+    }
+
+    public void convertRepeatDayBooleanArrToByte() {
+
     }
 }

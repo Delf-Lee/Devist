@@ -47,7 +47,6 @@ public class TodoController {
 
     @PostMapping("/add")
     public String add(final Principal principal, Todo todo) {
-        todo.convertRepeatDayBooleanArrToByte(); // todo: 이슈 #17 참고
         todoService.addTodo(principal.getName(), todo);
 
         return "redirect:/";
@@ -67,7 +66,6 @@ public class TodoController {
         if(userService.hasAuthorization(principal.getName(), todo )) {
             return "redirect:/denied";
         }
-        todo.convertRepeatDayByteToBooleanArr();
         model.addAttribute("todo", todo);
 
         return "edittodo";
@@ -75,7 +73,6 @@ public class TodoController {
 
     @PostMapping("/{id}/edit")
     public String edit(Todo todo, @PathVariable int id) {
-        todo.convertRepeatDayBooleanArrToByte(); // todo: 이슈 #17 참고
         todoService.updateTodo(id, todo);
 
         return "redirect:/";

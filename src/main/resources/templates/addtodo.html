@@ -55,9 +55,10 @@
                     <input th:type="checkbox" th:checked="${todo.repeatCheckbox[6]} ? 'checked'"
                            th:value="${todo.repeatCheckbox[6]}" th:field="*{repeatCheckbox[6]}"/>
                     <label th:text="SUN"></label>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </div>
             </div>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="hidden" th:name="${todo.repeatDay.}"/>
             <br/>
             <div>
                 <button type="submit" class="btn btn-primary">Add</button>

@@ -39,4 +39,16 @@ public class FlexibleRepeatDay extends RepeatDay {
         int today = LocalDate.now().getDayOfWeek().getValue();
         return (today <= day) && isTodaysTodo();
     }
+
+    /**
+     * @return 일주일 기준으로 오늘 이후에 요일에는 true, 나머지 false인 boolean[]
+     */
+//    public boolean[] getBooleanArr() {
+//        boolean[] res = new boolean[7];
+//        int today = LocalDate.now().getDayOfWeek().getValue();
+//        for (int i = today - 1; i < res.length; i++) {
+//            res[i] = true;
+//        }
+//        return res;
+//    }
 }
