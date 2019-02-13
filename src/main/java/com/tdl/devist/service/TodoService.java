@@ -63,7 +63,6 @@ public class TodoService {
 
     public void updateTodo(int id, Todo editedTodo) {
         Todo originTodo = todoRepository.getOne(id);
-
         originTodo.setTitle(editedTodo.getTitle());
         originTodo.setDescription(editedTodo.getDescription());
         originTodo.setRepeatDay(editedTodo.getRepeatDay());

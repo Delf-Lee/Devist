@@ -1,10 +1,7 @@
 package com.tdl.devist.service;
 
 
-import com.tdl.devist.model.DailyCheck;
-import com.tdl.devist.model.FixedRepeatDay;
-import com.tdl.devist.model.Todo;
-import com.tdl.devist.model.User;
+import com.tdl.devist.model.*;
 import com.tdl.devist.repository.DailyCheckRepository;
 import com.tdl.devist.repository.TodoRepository;
 import org.junit.Assert;
@@ -56,7 +53,7 @@ public class TodoServiceTests {
         Assert.assertEquals(1, entitySize);
         Todo todo = todoList.get(0);
         Assert.assertEquals(TEST_TODO_TITLE, todo.getTitle());
-        Assert.assertEquals(127, todo.getRepeatDay());
+        Assert.assertEquals(127, ((FixedRepeatDay)todo.getRepeatDay()).getDaysOfWeek());
     }
 
     @Test
@@ -99,15 +96,17 @@ public class TodoServiceTests {
         fixedRepeatDay = (FixedRepeatDay) afterTodo.getRepeatDay();
         fixedRepeatDay.convertRepeatDayBooleanArrToByte();
         Assert.assertEquals(editedTitle, afterTodo.getTitle());
-        Assert.assertEquals(64, afterTodo.getRepeatDay());
+        Assert.assertEquals(64, ((FixedRepeatDay) afterTodo.getRepeatDay()).getDaysOfWeek());
     }
 
     private Todo generateAndSaveTestTodoInstance(String username) {
         Todo todo = new Todo();
         User user = userService.getUserByUserName(username);
         todo.setTitle(TEST_TODO_TITLE);
-        FixedRepeatDay fixedRepeatDay = (FixedRepeatDay) todo.getRepeatDay();
+        FixedRepeatDay fixedRepeatDay = new FixedRepeatDay();
         fixedRepeatDay.setCheckboxs(new boolean[]{true, true, true, true, true, true, true});
+        fixedRepeatDay.setTodo(todo);
+        todo.setRepeatDay(fixedRepeatDay);
         todoService.addTodo(user.getUsername(), todo);
         userService.updateUser(user);
         return todo;
@@ -122,7 +121,9 @@ public class TodoServiceTests {
 
         Todo todo = new Todo();
         todo.setTitle(TODO_TITLE);
-        todo.setRepeatDay(new FixedRepeatDay());
+        RepeatDay repeatDay = new FixedRepeatDay();
+        repeatDay.setTodo(todo);
+        todo.setRepeatDay(repeatDay);
         User user = userService.getUserByUserName("cjh5414");
         todoService.addTodo(user.getUsername(), todo);
 
