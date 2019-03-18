@@ -1,5 +1,6 @@
 package com.tdl.devist.model;
 
+import com.tdl.devist.dto.TodoDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

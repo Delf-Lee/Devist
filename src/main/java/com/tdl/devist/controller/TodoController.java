@@ -1,5 +1,6 @@
 package com.tdl.devist.controller;
 
+import com.tdl.devist.dto.TodoDto;
 import com.tdl.devist.model.*;
 import com.tdl.devist.service.TodoService;
 import com.tdl.devist.service.UserService;
@@ -47,19 +48,19 @@ public class TodoController {
 
     @GetMapping("/add")
     public String addForm(Model model) {
-        model.addAttribute("todo", new Todo());
-        model.addAttribute("fixedRepeatDay", new FixedRepeatDay());
-        model.addAttribute("flexibleRepeatDay", new FlexibleRepeatDay());
+        model.addAttribute("todoDto", new TodoDto());
 
-        model.addAttribute("fixedOrFlexible", "fixed");
         return "addtodo";
     }
 
     @PostMapping("/add")
-    public String add(final Principal principal, Todo todo, final FixedRepeatDay fixedRepeatDay, final FlexibleRepeatDay flexibleRepeatDay, final String fixedOrFlexible) {
-        RepeatDay repeatDay = selectRepeatDay(fixedRepeatDay, flexibleRepeatDay, fixedOrFlexible);
-        repeatDay.setTodo(todo);
-        todo.setRepeatDay(repeatDay);
+    public String add(final Principal principal, final TodoDto todoDto) {
+        Todo todo = null;
+        try {
+            todo = todoDto.generateNewTodo();
+        } catch (Exception e) {
+            // TODO: 예외처리하기
+        }
         todoService.addTodo(principal.getName(), todo);
 
         return "redirect:/";
@@ -113,7 +114,8 @@ public class TodoController {
             case "fixed":
                 fixedRepeatDay.convertRepeatDayBooleanArrToByte();
                 return fixedRepeatDay;
-            case "flexible": return flexibleRepeatDay;
+            case "flexible":
+                return flexibleRepeatDay;
         }
         throw new NoSuchElementException();
     }

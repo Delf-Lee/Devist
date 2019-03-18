@@ -33,15 +33,15 @@ public class TodoService {
     }
 
     public void addTodo(String username, Todo todo) {
-        User user = userService.getUserByUserName(username);
+        User user = userService.getUserByUserName(username); // TODO: 유저가 없을시 예외 처리하기
         todo.setUser(user);
         todo.setCreatedTime(LocalDateTime.now());
-        todoRepository.save(todo);
+        todoRepository.save(todo); // TODO: 저장에 실패시 예외 처리하기
         if (todo.isOnToday()) {
             DailyCheck dailyCheck = dailyCheckService.createDailyCheckByTodo(todo);
             todo.setLatestDailyCheck(dailyCheck);
             todo.addDailyCheck(dailyCheck);
-            todoRepository.save(todo);
+            todoRepository.save(todo); // TODO: 저장이 중복되는지 확인하기
 
             updateDoneRate(todo);
             userService.updateDoneRate(username);
