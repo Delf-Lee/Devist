@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
-
+import com.tdl.devist.model.FixedRepeatDay.DayOfWeek;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -46,7 +46,7 @@ public class TodoServiceTests {
     @Transactional
     public void 요일고정_설정_Todo_추가에_성공한다() {
         FixedRepeatDay fixedRepeatDay = new FixedRepeatDay();
-        fixedRepeatDay.setCheckboxs(new boolean[]{true, true, true, true, true, true, true});
+        fixedRepeatDay.setDayOfWeeks(DayOfWeek.values());
         generateAndSaveTestTodoInstance(TEST_USER_NAME, fixedRepeatDay);
 
         User targetUser = userService.getUserByUserName(TEST_USER_NAME);
@@ -55,7 +55,7 @@ public class TodoServiceTests {
         Assert.assertEquals(1, entitySize);
         Todo todo = todoList.get(0);
         Assert.assertEquals(TEST_TODO_TITLE, todo.getTitle());
-        Assert.assertEquals(127, ((FixedRepeatDay) todo.getRepeatDay()).getDaysOfWeek());
+        Assert.assertEquals(127, ((FixedRepeatDay) todo.getRepeatDay()).getByteDaysOfWeek());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class TodoServiceTests {
         String editedTitle = "변경된 타이틀";
         todo.setTitle(editedTitle);
         FixedRepeatDay fixedRepeatDay = (FixedRepeatDay) todo.getRepeatDay();
-        fixedRepeatDay.setCheckboxs(new boolean[]{true, false, false, false, false, false, false});
+        fixedRepeatDay.setDayOfWeeks(null);
 
         todoService.updateTodo(todoId, todo);
 
@@ -118,7 +118,7 @@ public class TodoServiceTests {
         fixedRepeatDay = (FixedRepeatDay) afterTodo.getRepeatDay();
         fixedRepeatDay.convertRepeatDayBooleanArrToByte();
         Assert.assertEquals(editedTitle, afterTodo.getTitle());
-        Assert.assertEquals(64, ((FixedRepeatDay) afterTodo.getRepeatDay()).getDaysOfWeek());
+        Assert.assertEquals(64, ((FixedRepeatDay) afterTodo.getRepeatDay()).getByteDaysOfWeek());
     }
 
     private Todo generateAndSaveTestTodoInstance(String username, RepeatDay repeatDay) {

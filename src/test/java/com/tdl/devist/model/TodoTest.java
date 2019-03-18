@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.context.annotation.Profile;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+import com.tdl.devist.model.FixedRepeatDay.DayOfWeek;
 
+import java.time.LocalDate;
 
 @Profile("dev")
 @RunWith(MockitoJUnitRunner.class)
@@ -16,6 +16,7 @@ public class TodoTest {
 
     private final String TEST_USER_NAME = "my_name_is_user";
     private final String TEST_TODO_TITLE = "Todo 테스트하기 in TodoTest.class";
+
 
     @Test
     public void 변환테스트_byte에서_booleanArr() {
@@ -33,14 +34,16 @@ public class TodoTest {
         FixedRepeatDay repeatDay = new FixedRepeatDay();
 
         // when
-        repeatDay.setCheckboxs(new boolean[]{false, false, false, false, false, true, false});
+        repeatDay.setDayOfWeeks(new DayOfWeek[]{DayOfWeek.MON, DayOfWeek.THU});
         repeatDay.convertRepeatDayBooleanArrToByte();
+        System.out.println(repeatDay.getByteDaysOfWeek());
 
         // then
-        Assert.assertTrue(repeatDay.isOn(DayOfWeek.TUESDAY.getValue()));
+        Assert.assertTrue(repeatDay.isOn(DayOfWeek.MON.getValue()));
+        Assert.assertTrue(repeatDay.isOn(DayOfWeek.THU.getValue()));
+
     }
-    // 월화수목금토일
-    // 0000001
+
     @Test
     public void 요일_고정_할일이_오늘_할일이_아니다() {
 
@@ -48,17 +51,21 @@ public class TodoTest {
         FixedRepeatDay repeatDay = new FixedRepeatDay();
 
         // when
-        repeatDay.setCheckboxs(new boolean[]{true, false, true, true, true, true, true});
+        repeatDay.setDayOfWeeks(new DayOfWeek[]{DayOfWeek.MON, DayOfWeek.THU});
         repeatDay.convertRepeatDayBooleanArrToByte();
-        System.out.println(repeatDay.getDaysOfWeek());
+        System.out.println(repeatDay.getByteDaysOfWeek());
 
         // then
-        Assert.assertFalse(repeatDay.isOn(DayOfWeek.SATURDAY.getValue()));
+        Assert.assertFalse(repeatDay.isOn(DayOfWeek.TUE.getValue()));
+        Assert.assertFalse(repeatDay.isOn(DayOfWeek.FRI.getValue()));
+        Assert.assertFalse(repeatDay.isOn(DayOfWeek.SAT.getValue()));
+        Assert.assertFalse(repeatDay.isOn(DayOfWeek.SUN.getValue()));
+        Assert.assertFalse(repeatDay.isOn(DayOfWeek.WED.getValue()));
     }
 
     @Test
     public void 요일_유동_할일이_오늘_할일이다() {
-        // given
+        /*// given
         FlexibleRepeatDay repeatDay = new FlexibleRepeatDay();
         Todo todo = new Todo();
         repeatDay.setTodo(todo);
@@ -71,12 +78,12 @@ public class TodoTest {
         todo.addDailyCheck(generateTestDailyCheck(LocalDate.of(2018, 12, 25), false)); // 오늘
 
         // then
-        Assert.assertTrue(repeatDay.isOn(DayOfWeek.FRIDAY.getValue()));
+        Assert.assertTrue(repeatDay.isOn(DayOfWeek.FRIDAY.getValue()));*/
     }
 
     @Test
     public void 요일_유동_할일이_완료된_할일이다() {
-        // given
+        /*// given
         FlexibleRepeatDay repeatDay = new FlexibleRepeatDay();
         Todo todo = new Todo();
         repeatDay.setTodo(todo);
@@ -90,7 +97,7 @@ public class TodoTest {
         todo.addDailyCheck(generateTestDailyCheck(LocalDate.of(2018, 12, 25), false)); // 오늘
 
         // then
-        Assert.assertFalse(repeatDay.isOn(DayOfWeek.FRIDAY.getValue()));
+        Assert.assertFalse(repeatDay.isOn(DayOfWeek.FRIDAY.getValue()));*/
     }
 
     private DailyCheck generateTestDailyCheck(LocalDate localDate, boolean isDone) {

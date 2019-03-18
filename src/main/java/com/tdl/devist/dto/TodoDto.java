@@ -15,20 +15,13 @@ public class TodoDto {
     @Getter
     private String description;
 
+
     @Getter
-    private Todo.Type type;
+     private Todo.Type type;
+//    private String type;
+
     private FixedRepeatDay fixedRepeatDay;
     private FlexibleRepeatDay flexibleRepeatDay;
-
-    public RepeatDay getRepeatDay() throws Exception {
-        switch (type) {
-            case FIXED:
-                return fixedRepeatDay;
-            case FLEXIBLE:
-                return flexibleRepeatDay;
-        }
-        throw new Exception(); // TODO: 예외 관리하기
-    }
 
     public Todo generateNewTodo() throws Exception {
         Todo todo = new Todo();
@@ -36,6 +29,17 @@ public class TodoDto {
         todo.setDescription(description);
         todo.setRepeatDay(getRepeatDay());
         return todo;
+    }
+
+    public RepeatDay getRepeatDay() throws Exception {
+        // switch (Todo.Type.valueOf(type)) {
+        switch (type) {
+            case FIXED:
+                return fixedRepeatDay;
+            case FLEXIBLE:
+                return flexibleRepeatDay;
+        }
+        throw new Exception(); // TODO: 예외 관리하기
     }
 
 }

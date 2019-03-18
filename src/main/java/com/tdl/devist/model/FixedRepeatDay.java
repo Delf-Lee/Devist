@@ -1,5 +1,6 @@
 package com.tdl.devist.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,29 +16,41 @@ import java.time.LocalDate;
 @ToString
 public class FixedRepeatDay extends RepeatDay {
     @Column(length = 1)
-    private byte daysOfWeek = 127;
+    private byte byteDaysOfWeek = 127;
+
+    @AllArgsConstructor
+    public
+    enum DayOfWeek {
+        MON(1), TUE(2), WED(3), THU(4), FRI(5), SAT(6), SUN(7);
+        public final static int n = 7;
+        @Getter
+        private int value;
+    }
+
     @Transient
-    private boolean[] checkboxs = {true, true, true, true, true, true, true};
+    private DayOfWeek[] dayOfWeeks;
+
     @Transient
     private final String[] WEEK_DAY_STR = {"월", "화", "수", "목", "금", "토", "일"};
 
     public void convertRepeatDayBooleanArrToByte() {
-        daysOfWeek = 0;
-        for (int i = 0; i < checkboxs.length; i++) {
-            daysOfWeek |= checkboxs[i] ? (byte) (1 << (checkboxs.length - 1) - i) : 0;
+        byteDaysOfWeek = 0;
+        for (DayOfWeek w : dayOfWeeks) {
+            byteDaysOfWeek |= (byte) (1 << w.getValue() - 1);
         }
     }
 
     public void convertRepeatDayByteToBooleanArr() {
-        for (int i = checkboxs.length - 1; i >= 0; i--) {
-            checkboxs[checkboxs.length - 1 - i] = ((daysOfWeek >> i) & 1) == 1;
+        int cur = 0;
+        for (int i = 0; i < DayOfWeek.n; i++) {
+            dayOfWeeks[cur] = ((byteDaysOfWeek >> i) & 1) == 1 ? DayOfWeek.values()[cur++] : null;
         }
     }
 
     @Override
     public boolean isOnToday() {
         int today = LocalDate.now().getDayOfWeek().getValue();
-        return (daysOfWeek & (1 << (today - 1))) > 0;
+        return (byteDaysOfWeek & (1 << (today - 1))) > 0;
 
     }
 
@@ -53,7 +66,7 @@ public class FixedRepeatDay extends RepeatDay {
 
     @Override
     public boolean isOn(int dayOfWeek) {
-        return (daysOfWeek & (1 << (dayOfWeek - 1))) > 0;
+        return (byteDaysOfWeek & (1 << (dayOfWeek - 1))) > 0;
     }
 
 
