@@ -18,7 +18,7 @@ public class TodoDto {
 
     private String type;
 
-    private FixedRepeatDay.DayOfWeek[] dayOfWeeks;
+    private FixedRepeatDay.DayOfWeek[] dayOfWeeks = FixedRepeatDay.DayOfWeek.values();
     private int doingCount;
 
     public Todo generateNewTodo() throws Exception {
@@ -39,6 +39,7 @@ public class TodoDto {
     }
 
     public RepeatDay getRepeatDay() throws Exception {
+        System.out.println("@@ type: " + type);
         switch (Todo.Type.valueOf(type)) {
             case FIXED:
                 FixedRepeatDay fixedRepeatDay = new FixedRepeatDay();

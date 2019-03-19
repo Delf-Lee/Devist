@@ -31,18 +31,21 @@
 
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
                     <label id="btn-fixed" class="btn btn-secondary">
-                        <input type="radio" name="repeat-day" value="fixed" autocomplete="off" checked> Fixed
+                        <input type="radio" name="repeat-day" value="FIXED" autocomplete="off" checked> Fixed
                     </label>
                     <label id="btn-flexible" class="btn btn-secondary">
-                        <input type="radio" name="repeat-day" value="flexible" autocomplete="off"> Flexible
+                        <input type="radio" name="repeat-day" value="FLEXIBLE" autocomplete="off"> Flexible
                     </label>
                 </div>
 
                 <div id="div-fixedrepeatday" class="form-group row" style="display: none;">
                     <label for="todo_fixed_repeat" class="col-sm-4 col-form-label">Fixed Repeat days</label>
-                    <div class="col-sm-10" id="todo_fixed_repeat" th:object="${fixedRepeatDay}">
-
-                        <input th:type="checkbox" th:checked="${fixedRepeatDay.checkboxs[6]} ? 'checked'" th:field="*{checkboxs[6]}"/>
+                    <!--<div class="col-sm-10" id="todo_fixed_repeat" th:object="${todoDto.dayOfWeeks}">-->
+                    <div class="col-sm-10" id="todo_fixed_repeat" th:each="dayOfWeek : ${todoDto.dayOfWeeks}">
+                        <input type="checkbox" th:field="*{dayOfWeeks}" th:value="${dayOfWeek}" />
+                        <!--<input th:type="checkbox" th:checked="${fixedRepeatDay.checkboxs[6]} ? 'checked'" th:field="*{checkboxs[6]}"/>
+                        <label th:text="월"></label>-->
+                        <!--<input th:type="checkbox" th:checked="${fixedRepeatDay.checkboxs[6]} ? 'checked'" th:field="*{checkboxs[6]}"/>
                         <label th:text="월"></label>
 
                         <input th:type="checkbox" th:checked="${fixedRepeatDay.checkboxs[5]} ? 'checked'" th:field="*{checkboxs[5]}"/>
@@ -61,14 +64,14 @@
                         <label th:text="토"></label>
 
                         <input th:type="checkbox" th:checked="${fixedRepeatDay.checkboxs[0]} ? 'checked'" th:field="*{checkboxs[0]}"/>
-                        <label th:text="일"></label>
+                        <label th:text="일"></label>-->
                     </div>
                 </div>
                 <div id="div-flexiblerepeatday" class="form-group row" style="display: none;">
                     <label for="todo_flexible_repeat" class="col-sm-4 col-form-label">Flexible Repeat days</label>
                     <div class="col-sm-10">
                         <input th:type="number" class="form-control" id="todo_flexible_repeat" placeholder="1"
-                               th:field="${flexibleRepeatDay.doingCount}"/>
+                               th:field="${todoDto.doingCount}"/>
                     </div>
                 </div>
             </div>

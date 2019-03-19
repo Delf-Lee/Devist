@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/todos")
@@ -54,11 +55,13 @@ public class TodoController {
 
     @PostMapping("/add")
     public String add(final Principal principal, final TodoDto todoDto) {
+        logger.info("[Add Todo] ID : {}", principal.getName());
+
         try {
             Todo todo = todoDto.generateNewTodo();
             todoService.addTodo(principal.getName(), todo);
         } catch (Exception e) {
-            // TODO: 예외처리하기
+            e.printStackTrace(); // TODO: 예외처리하기
         }
 
         return "redirect:/";
