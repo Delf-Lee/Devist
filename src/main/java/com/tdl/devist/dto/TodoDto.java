@@ -5,26 +5,33 @@ import com.tdl.devist.model.FlexibleRepeatDay;
 import com.tdl.devist.model.RepeatDay;
 import com.tdl.devist.model.Todo;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author delf
  */
+@Getter
+@Setter
 public class TodoDto {
-    @Getter
     private String title;
-    @Getter
     private String description;
 
+    private String type;
 
-    @Getter
-     private Todo.Type type;
-//    private String type;
-
-    private FixedRepeatDay fixedRepeatDay;
-    private FlexibleRepeatDay flexibleRepeatDay;
+    private FixedRepeatDay.DayOfWeek[] dayOfWeeks;
+    private int doingCount;
 
     public Todo generateNewTodo() throws Exception {
         Todo todo = new Todo();
+        todo.setTitle(title);
+        todo.setDescription(description);
+        RepeatDay repeatDay = getRepeatDay();
+        repeatDay.setTodo(todo);
+        todo.setRepeatDay(repeatDay);
+        return todo;
+    }
+
+    public Todo getUpdatedTodo(Todo todo) throws Exception {
         todo.setTitle(title);
         todo.setDescription(description);
         todo.setRepeatDay(getRepeatDay());
@@ -32,14 +39,17 @@ public class TodoDto {
     }
 
     public RepeatDay getRepeatDay() throws Exception {
-        // switch (Todo.Type.valueOf(type)) {
-        switch (type) {
+        switch (Todo.Type.valueOf(type)) {
             case FIXED:
+                FixedRepeatDay fixedRepeatDay = new FixedRepeatDay();
+                fixedRepeatDay.setDayOfWeeks(dayOfWeeks);
+                fixedRepeatDay.convertRepeatDayBooleanArrToByte();
                 return fixedRepeatDay;
             case FLEXIBLE:
+                FlexibleRepeatDay flexibleRepeatDay = new FlexibleRepeatDay();
+                flexibleRepeatDay.setDoingCount(doingCount);
                 return flexibleRepeatDay;
         }
         throw new Exception(); // TODO: 예외 관리하기
     }
-
 }

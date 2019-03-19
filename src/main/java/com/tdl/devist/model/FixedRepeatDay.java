@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Entity
 @ToString
 public class FixedRepeatDay extends RepeatDay {
-    @Column(length = 1)
+    @Column(length = 1, name = "days_of_week")
     private byte byteDaysOfWeek = 127;
 
     @AllArgsConstructor
@@ -28,7 +28,7 @@ public class FixedRepeatDay extends RepeatDay {
     }
 
     @Transient
-    private DayOfWeek[] dayOfWeeks;
+    private DayOfWeek[] dayOfWeeks = new DayOfWeek[7];
 
     @Transient
     private final String[] WEEK_DAY_STR = {"월", "화", "수", "목", "금", "토", "일"};

@@ -69,6 +69,8 @@ public class TodoAPIControllerTests {
     @Transactional
     public void testCheckTodoIsDone() throws Exception {
         Todo todo = todoRepository.findByTitle("매일 하는 일").get(0);
+        System.out.println(todo.getRepeatDay());
+        System.out.println(todo);
         mockMvc.perform(post("/api/todos/" + todo.getId() + "/do")
                 .param("isDone", "true")
                 .with(csrf())

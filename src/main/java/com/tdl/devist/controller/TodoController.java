@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/todos")
@@ -55,13 +54,12 @@ public class TodoController {
 
     @PostMapping("/add")
     public String add(final Principal principal, final TodoDto todoDto) {
-        Todo todo = null;
         try {
-            todo = todoDto.generateNewTodo();
+            Todo todo = todoDto.generateNewTodo();
+            todoService.addTodo(principal.getName(), todo);
         } catch (Exception e) {
             // TODO: 예외처리하기
         }
-        todoService.addTodo(principal.getName(), todo);
 
         return "redirect:/";
     }
@@ -83,7 +81,9 @@ public class TodoController {
             return "redirect:/denied";
         }
 
-        model.addAttribute("todo", todo);
+        model.addAttribute("todoDto", new TodoDto());
+
+        /*model.addAttribute("todo", todo);
 
         if (todo.getRepeatDay() instanceof FixedRepeatDay) {
             ((FixedRepeatDay) todo.getRepeatDay()).convertRepeatDayByteToBooleanArr();
@@ -94,29 +94,16 @@ public class TodoController {
             model.addAttribute("fixedRepeatDay", new FixedRepeatDay());
             model.addAttribute("flexibleRepeatDay", todo.getRepeatDay());
             model.addAttribute("fixedOrFlexible", "flexible");
-        }
+        }*/
 
         return "edittodo";
     }
 
     @PostMapping("/{id}/edit")
-    public String edit(Todo todo, @PathVariable int id, FixedRepeatDay fixedRepeatDay, FlexibleRepeatDay flexibleRepeatDay, final String fixedOrFlexible) {
-        RepeatDay repeatDay = selectRepeatDay(fixedRepeatDay, flexibleRepeatDay, fixedOrFlexible);
-        todo.setRepeatDay(repeatDay);
-        todoService.updateTodo(id, todo);
+    public String edit(@PathVariable int id, final TodoDto todoDto) {
+        todoService.updateTodo(id, todoDto);
+
 
         return "redirect:/todos";
-    }
-
-
-    public RepeatDay selectRepeatDay(FixedRepeatDay fixedRepeatDay, FlexibleRepeatDay flexibleRepeatDay, String flag) {
-        switch (flag) {
-            case "fixed":
-                fixedRepeatDay.convertRepeatDayBooleanArrToByte();
-                return fixedRepeatDay;
-            case "flexible":
-                return flexibleRepeatDay;
-        }
-        throw new NoSuchElementException();
     }
 }

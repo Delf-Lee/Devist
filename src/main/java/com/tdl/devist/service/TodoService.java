@@ -1,5 +1,6 @@
 package com.tdl.devist.service;
 
+import com.tdl.devist.dto.TodoDto;
 import com.tdl.devist.model.DailyCheck;
 import com.tdl.devist.model.Todo;
 import com.tdl.devist.model.User;
@@ -11,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class TodoService {
@@ -62,12 +60,9 @@ public class TodoService {
         deleteTodo(todo);
     }
 
-    public void updateTodo(int id, Todo editedTodo) {
+    public void updateTodo(int id, TodoDto todoDto) {
         Todo originTodo = todoRepository.getOne(id);
-
-        originTodo.setTitle(editedTodo.getTitle());
-        originTodo.setDescription(editedTodo.getDescription());
-        originTodo.setRepeatDay(editedTodo.getRepeatDay());
+        originTodo.update(todoDto);
         todoRepository.save(originTodo);
     }
 

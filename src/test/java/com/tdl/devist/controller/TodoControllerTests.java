@@ -1,5 +1,6 @@
 package com.tdl.devist.controller;
 
+import com.tdl.devist.model.FixedRepeatDay;
 import com.tdl.devist.model.Todo;
 import com.tdl.devist.model.User;
 import com.tdl.devist.repository.TodoRepository;
@@ -50,14 +51,14 @@ public class TodoControllerTests {
     }
 
     @Test
-    public void testGetTodoListPage() throws Exception {
+    public void 할일_리스트_페이지를_요청하고_성공적으로_받아온다() throws Exception {
         mockMvc.perform(get("/todos")
                 .with(user("admin").password("1234").roles("USER", "ADMIN")))
                 .andExpect(status().isOk());
     }
 
     @Test
-    public void testGetTodoAddForm() throws Exception {
+    public void 할일_추가_페이지를_요청하고_성공적으로_받아온다() throws Exception {
         mockMvc.perform(get("/todos/add")
                 .with(user("admin").password("1234").roles("USER", "ADMIN")))
                 .andExpect(status().isOk());
@@ -65,14 +66,16 @@ public class TodoControllerTests {
 
     @Test
     @Transactional
-    public void testAddTodo() throws Exception {
+    public void 고정요일_할일_추가에_성공한다() throws Exception {
         int todoSize = todoRepository.findAll().size();
 
         mockMvc.perform(post("/todos/add")
                 .with(user("admin").password("1234").roles("USER", "ADMIN"))
                 .param("title", "test title")
                 .param("description", "test description")
-                .param("fixedOrFlexible", "fixed")
+                // .param("fixedOrFlexible", "fixed")
+                .param("type", "FIXED")
+                .param("dayOfWeeks", new String[]{FixedRepeatDay.DayOfWeek.MON.toString()})
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection());
 
@@ -82,8 +85,14 @@ public class TodoControllerTests {
     }
 
     @Test
+    public void 유동요일_할일_추가에_성공한다() {
+        // TODO: 테스트 작성
+        // throw new AssertionError();
+    }
+
+    @Test
     @Transactional
-    public void testDeleteTodo() throws Exception {
+    public void 할일_삭제에_성공한다() throws Exception {
         User user = userRepository.getOne("cjh5414");
         List<Todo> todoList = user.getTodoList();
         int size = todoList.size();
@@ -101,17 +110,17 @@ public class TodoControllerTests {
 
     @Test
     @Transactional
-    public void testEditTodo() throws Exception {
+    public void 할일의_타이틀_수정에_성공한다() throws Exception {
         User user = userRepository.getOne("cjh5414");
         List<Todo> todoList = user.getTodoList();
-        Assert.assertNotEquals("TodoList가 비어있음.", 0, todoList.size());
+        Assert.assertNotEquals(0, todoList.size());
         int todoId = todoList.get(0).getId();
 
         String editedTitle = "바뀐 타이틀";
         mockMvc.perform(post("/todos/" + todoId + "/edit")
                 .with(user("cjh5414").password("1234").roles("USER"))
                 .param("title", editedTitle)
-                .param("fixedOrFlexible", "fixed")
+                .param("type", "FIXED")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection());
 

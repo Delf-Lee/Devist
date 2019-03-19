@@ -41,8 +41,8 @@ public class Todo {
 
     public enum Type {
         FIXED, FLEXIBLE, TYPE_ERROR;
-    }
 
+    }
     public boolean addDailyCheck(DailyCheck dailyCheck) {
         return dailyChecks.add(dailyCheck);
     }
@@ -71,5 +71,11 @@ public class Todo {
         if (this.repeatDay instanceof FixedRepeatDay) return Type.FIXED;
         else if (this.repeatDay instanceof FlexibleRepeatDay) return Type.FLEXIBLE;
         return Type.TYPE_ERROR;
+    }
+
+    public void update(TodoDto todoDto) {
+        this.title = todoDto.getTitle();
+        this.description = todoDto.getDescription();
+        this.repeatDay = getRepeatDay();
     }
 }
